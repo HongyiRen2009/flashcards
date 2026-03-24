@@ -1,0 +1,63 @@
+<style src="style.css"></style>
+<div class="container">
+  <div id="wordSetButtons" class="controls">
+    <!-- Word set buttons will be added here dynamically -->
+  </div>
+  <div class="controls" style="justify-content: center">
+    <button class="button" onclick="showNewSetPrompt()">Create New Set</button>
+    <button class="button" onclick="toggleWordList()">Manage Words</button>
+  </div>
+
+  <h1 id="wordDisplay"></h1>
+  <p
+    id="pinyinHint"
+    style="margin: -1rem 0 1rem; min-height: 1.5rem; color: #555; font-size: 22px"
+  ></p>
+  <div
+    style="
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <input type="text" id="Input" placeholder="Type the word..." />
+    <button
+      class="button"
+      id="dontKnowBtn"
+      onclick="dontKnowWord()"
+      style="margin-left: 10px; height: 100%"
+    >
+      Don't Know
+    </button>
+  </div>
+
+  <div
+    id="reviewControls"
+    class="controls"
+    style="justify-content: center; display: none; margin-top: 12px"
+  >
+    <button class="button" onclick="rateCurrentCard('again')">Again</button>
+    <button class="button" onclick="rateCurrentCard('hard')">Hard</button>
+    <button class="button" onclick="rateCurrentCard('good')">Good</button>
+    <button class="button" onclick="rateCurrentCard('easy')">Easy</button>
+  </div>
+
+  <div class="word-input-container">
+    <input type="text" id="wordInput" placeholder="Add new word..." />
+    <button class="button" onclick="submitNewWord()">Add Word</button>
+  </div>
+  <div id="wordListContainer" class="word-list-container">
+    <p id="ManageWordsNumberOfWords" style="text-align: center">
+      Number of Words:
+    </p>
+    <div id="wordList"></div>
+    <button class="button delete-selected" onclick="deleteSelectedWords()">
+      Delete Selected Words
+    </button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/pinyin-pro@3.26.0/dist/index.umd.js"></script>
+
+<script src="index.js"></script>

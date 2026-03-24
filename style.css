@@ -1,0 +1,189 @@
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 3rem;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 600px;
+    max-width: 40%;
+  }
+
+  .button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1a73e8;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .button:hover {
+    background-color: #1557b0;
+  }
+
+  .button.active {
+    background-color: #1557b0;
+  }
+
+  #wordDisplay {
+    font-size: 150px;
+    text-align: center;
+    margin: 3rem 0;
+    color: #333;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+  }
+
+  #Input {
+    width: 400px;
+    margin: 20px 0;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #Input:focus {
+    border-color: #1a73e8;
+  }
+
+  #wordInput {
+    flex: 1;
+    min-width: 250px;
+    padding: 12px 12px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #wordInput:focus {
+    border-color: #1a73e8;
+  }
+
+  .controls {
+    margin-bottom: 25px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .word-input-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 25px 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .word-set-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .edit-button,
+  .delete-button {
+    padding: 4px 8px;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  .word-set-container:hover .edit-button,
+  .word-set-container:hover .delete-button {
+    opacity: 1;
+  }
+
+  .word-list-container {
+    display: none;
+    width: 100%;
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: #000000 1px solid;
+    padding: 4px;
+  }
+
+  .word-list-item {
+    padding: 8px 16px;
+    margin: 4px 0;
+    background: #f8f9fa;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .word-list-item.selected {
+    background: #e3f2fd;
+    border: 1px solid #1a73e8;
+  }
+
+  .delete-selected {
+    margin-top: 10px;
+    background-color: #dc3545;
+  }
+
+  .delete-selected:hover {
+    background-color: #c82333;
+  }
+  h1 {
+    font-weight: 500;
+  }
+  #wordSetButtons {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px 20px 10px 0;
+    scrollbar-width: normal;
+    scrollbar-color: #1a73e8 #f0f2f5;
+  }
+
+  #wordSetButtons::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  #wordSetButtons::-webkit-scrollbar-track {
+    background: #f0f2f5;
+    border-radius: 4px;
+  }
+
+  #wordSetButtons::-webkit-scrollbar-thumb {
+    background: #1a73e8;
+    border-radius: 4px;
+  }
+
+  #wordSetButtons::-webkit-scrollbar-thumb:hover {
+    background: #1557b0;
+  }
+
+  .word-set-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
