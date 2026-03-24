@@ -50,6 +50,87 @@
       .catch(() => alert("Failed to copy words."));
   }
 
+  function exportWordSets() {
+    const dataToExport = wordSets.slice(1); // Exclude "All" set (index 0)
+    if (dataToExport.length === 0) {
+      alert("No word sets to export.");
+      return;
+    }
+    const dataStr = JSON.stringify(dataToExport, null, 2);
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `flashcard-sets-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importWordSets() {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".json";
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const importedSets = JSON.parse(event.target.result);
+          if (!Array.isArray(importedSets)) {
+            alert("Invalid file format. Expected an array of word sets.");
+            return;
+          }
+          // Validate structure
+          const isValid = importedSets.every(
+            (set) => set.name && Array.isArray(set.words)
+          );
+          if (!isValid) {
+            alert("Invalid file format. Each set must have 'name' and 'words' array.");
+            return;
+          }
+          // Check for duplicates
+          const existingNames = new Set(wordSets.slice(1).map(s => s.name.toLowerCase()));
+          const duplicates = importedSets.filter(s => existingNames.has(s.name.toLowerCase()));
+          if (duplicates.length > 0) {
+            const proceed = confirm(
+              `The following sets already exist: ${duplicates.map(d => d.name).join(", ")}\n\nDo you want to merge them?\n\nOK = Merge (add words to existing sets)\nCancel = Skip import`
+            );
+            if (!proceed) return;
+          }
+          // Import sets
+          importedSets.forEach((importedSet) => {
+            const existingSet = wordSets.find(s => s.name.toLowerCase() === importedSet.name.toLowerCase());
+            if (existingSet) {
+              // Merge words
+              const newWords = importedSet.words.filter(w => !existingSet.words.includes(w));
+              existingSet.words.push(...newWords);
+              newWords.forEach(word => getCardState(word));
+            } else {
+              // Add new set
+              wordSets.push(importedSet);
+              importedSet.words.forEach(word => getCardState(word));
+            }
+          });
+          // Rebuild "All" set
+          wordSets[0].words = [];
+          for (let i = 1; i < wordSets.length; i++) {
+            wordSets[0].words.push(...wordSets[i].words);
+          }
+          saveWordSets();
+          saveReviewState();
+          updateWordSetButtons();
+          initializeWordSet(currentSetIndex);
+          alert("Word sets imported successfully!");
+        } catch (error) {
+          alert("Error parsing file: " + error.message);
+        }
+      };
+      reader.readAsText(file);
+    };
+    fileInput.click();
+  }
+
   function normalizeWord(value) {
     return value.trim().toLowerCase();
   }
