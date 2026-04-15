@@ -5,6 +5,7 @@
   let currentSetIndex = 0;
   let currentWord = null;
   let selectedWords = new Set();
+  let skipTimerMode = false;
 
   function saveWordSets() {
     localStorage.setItem("flashcardSets", JSON.stringify(wordSets));
@@ -185,6 +186,14 @@
     document.getElementById("reviewControls").style.display = "none";
   }
 
+  function toggleSkipTimer() {
+    skipTimerMode = !skipTimerMode;
+    const btn = document.getElementById("skipTimerBtn");
+    btn.textContent = skipTimerMode ? "Resume Normal Mode" : "Skip Timer";
+    btn.style.backgroundColor = skipTimerMode ? "#d32f2f" : "#1a73e8";
+    updateDisplay();
+  }
+
   function getPinyinForWord(word) {
     
     try {
@@ -292,6 +301,9 @@
   function initializeWordSet(setIndex) {
     currentSetIndex = setIndex;
     selectedWords.clear();
+    skipTimerMode = false;
+    document.getElementById("skipTimerBtn").textContent = "Skip Timer";
+    document.getElementById("skipTimerBtn").style.backgroundColor = "#1a73e8";
     hideAnswerAndReviewControls();
     updateDisplay();
     updateWordSetButtons();
@@ -302,23 +314,35 @@
     hideAnswerAndReviewControls();
     if (wordSets[currentSetIndex].words.length === 0) {
       document.getElementById("wordDisplay").innerHTML = "No words";
+      document.getElementById("skipTimerControls").style.display = "none";
       currentWord = null;
       return;
     }
 
-    const dueWords = getDueWords();
-    if (dueWords.length === 0) {
+    let availableWords = skipTimerMode 
+      ? wordSets[currentSetIndex].words 
+      : getDueWords();
+
+    if (availableWords.length === 0) {
       currentWord = null;
       const delay = getNextDueDelayMs();
       document.getElementById("wordDisplay").innerHTML =
         delay === null
           ? "No words"
           : `No cards due (next in ${formatDelay(delay)})`;
+      
+      // Show skip timer button when there are no due cards but words exist
+      if (wordSets[currentSetIndex].words.length > 0) {
+        document.getElementById("skipTimerControls").style.display = "flex";
+      } else {
+        document.getElementById("skipTimerControls").style.display = "none";
+      }
       return;
     }
 
-    currentWord = dueWords[Math.floor(Math.random() * dueWords.length)];
+    currentWord = availableWords[Math.floor(Math.random() * availableWords.length)];
     document.getElementById("wordDisplay").innerHTML = currentWord;
+    document.getElementById("skipTimerControls").style.display = "none";
   }
 
   function showNewSetPrompt() {
